@@ -1,0 +1,70 @@
+body {
+  background-color: #1b1924;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 320px;
+  margin: 30px auto;
+}
+img {
+  width: 150px;
+  margin: 0 auto;
+  border-radius: 30px;
+}
+h1 {
+  color: #fff;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 25px;
+  text-align: center;
+}
+.champions {
+  text-align: center;
+}
+input {
+  width: 317px;
+  height: 118px;
+  margin: 0 auto;
+  border-radius: 5px;
+  border: none;
+  background: #444059;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 18px;
+  font-family: "Inter", sans-serif;
+}
+button {
+  padding: 18px 120px;
+  border-radius: 5px;
+  border: none;
+  background-color: #3ea9f1;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
+h2 {
+  text-align: center;
+  color: #fff;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 20px;
+  line-height: 20px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+ul li {
+  font-size: 20px;
+  background-color: #fffdf8;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 2px;
+  flex-grow: 1;
+  text-align: center;
+}
