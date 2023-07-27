@@ -4,6 +4,7 @@ import {
   ref,
   push,
   onValue,
+  set,
   remove,
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
@@ -14,59 +15,85 @@ const appSettings = {
 
 const app = initializeApp(appSettings);
 const database = getDatabase(app);
-const endorsementsInDB = ref(database, "endorsementsList");
+const endorsementsInDB = ref(database, "endorsements");
 
-const inputFieldEl = document.getElementById("input-field");
-const endorsementsBtnEl = document.getElementById("publish-btn");
-const endorsementListEl = document.getElementById("endorsements");
+const mainInputFieldEl = document.getElementById("main-input-field");
+const publishBtnEl = document.getElementById("publish-btn");
+const endorsementsEl = document.getElementById("endorsements");
+const toInputEl = document.getElementById("to-input-field");
+const fromInputEl = document.getElementById("from-input-field");
 
-endorsementsBtnEl.addEventListener("click", function () {
-  let inputValue = inputFieldEl.value;
-
-  push(endorsementsInDB, inputValue);
-
-  clearInputFieldEl();
-});
-
-onValue(endorsementsInDB, function (snapshot) {
-  if (snapshot.exists()) {
-    let itemsArray = Object.entries(snapshot.val());
-
-    clearEndorsementListEl();
-
-    for (let i = 0; i < itemsArray.length; i++) {
-      let currentItem = itemsArray[i];
-      let currentItemID = currentItem[0];
-      let currentItemValue = currentItem[1];
-
-      appendItemToEndorsementListEl(currentItem);
-    }
+publishBtnEl.addEventListener("click", () => {
+  let addToInput = toInputEl.value;
+  let addFromInput = fromInputEl.value;
+  let addValue = mainInputFieldEl.value;
+  if (addValue === "" || addFromInput === "" || addFromInput === "") {
+    clearInputField();
   } else {
-    endorsementListEl.innerHTML = "No Endorsements Yet";
+    push(endorsementsInDB, {
+      comment: addValue,
+      toInput: addToInput,
+      fromInput: addFromInput,
+    });
+    clearInputField();
+    clearFromToInputs();
   }
 });
 
-function clearEndorsementListEl() {
-  endorsementListEl.innerHTML = "";
+onValue(endorsementsInDB, (snapshot) => {
+  if (snapshot.exists()) {
+    let endorsementsArray = Object.entries(snapshot.val());
+    clearEndorsementsEl();
+    for (let i = 0; i < endorsementsArray.length; i++) {
+      let currentEnforsement = endorsementsArray[i];
+      appendEndorsement(currentEnforsement);
+    }
+  } else {
+    endorsementsEl.innerHTML = "";
+  }
+});
+function clearInputField() {
+  mainInputFieldEl.value = "";
+  toInputEl.value = "";
+  fromInputEl.value = "";
+}
+function clearEndorsementsEl() {
+  endorsementsEl.innerHTML = "";
+}
+function clearFromToInputs() {
+  toInputEl.value = "";
+  fromInputEl.value = "";
 }
 
-function clearInputFieldEl() {
-  inputFieldEl.value = "";
-}
+function appendEndorsement(endorsementEntry) {
+  let endorsementID = endorsementEntry[0];
+  let endorsementValue = endorsementEntry[1].comment;
+  let endorsementFrom = endorsementEntry[1].fromInput;
+  let endorsementTo = endorsementEntry[1].toInput;
+  let newComment = document.createElement("p");
 
-function appendItemToEndorsementListEl(item) {
-  let itemID = item[0];
-  let itemValue = item[1];
+  newComment.innerHTML = `
+  <span class="bold-text"> To: ${endorsementTo}</span>
+  <p class="endorsement-text"> ${endorsementValue}</p>
+  <div id="post-footerr>
+  <span class="bold-text"> From: ${endorsementFrom}</span>
+  <span class="likes-counter"><span class="likes-count">0</span>♥️</span
+  </div>
+  `;
 
-  let newEl = document.createElement("li");
-
-  newEl.textContent = itemValue;
-
-  newEl.addEventListener("dblclick", function () {
-    let exactLocationOfItemInDB = ref(database, `endorsementsList/${itemID}`);
-
+  newComment.addEventListener("dblclick", () => {
+    let exactLocationOfItemInDB = ref(
+      database,
+      `endorsements/${endorsementID}`
+    );
     remove(exactLocationOfItemInDB);
   });
 
-  endorsementListEl.append(newEl);
+  endorsementsEl.append(newComment);
+  const likesCountEl = document.querySelector(".likes-count");
+  let likesCount = 0;
+  likesCountEl.addEventListener("click", function () {
+    likesCount += 1;
+  });
+  likesCountEl.textContent = likesCount;
 }

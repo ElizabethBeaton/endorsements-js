@@ -21,21 +21,24 @@
   </head>
   <body>
     <div class="container">
-      <img src="images/freddiemercury.jpeg" alt="" />
-      <h1>We are the champions</h1>
-      <input
-        type="text"
-        id="input-field"
-        placeholder="Write your endorsement here"
+      <img
+        src="images/freddiemercury.jpeg"
+        alt="silouhette image of Freddie Mercury from Queen holding a mic stand and raising his right fist straight up in the air"
       />
+      <h1>Endorsements</h1>
+      <textarea
+        type="text"
+        id="main-input-field"
+        placeholder="Write your endorsement here"
+      ></textarea>
+      <div class="input-field-container">
+        <input type="text" id="from-input-field" placeholder="From" />
+        <input type="text" id="to-input-field" placeholder="To" />
+      </div>
       <button id="publish-btn">Publish</button>
       <h2>- Endorsements -</h2>
-      <ul id="endorsements">
-        <li></li>
-        <li></li>
-      </ul>
+      <div id="endorsements"></div>
     </div>
-
     <script src="script.js" type="module"></script>
   </body>
 </html>
